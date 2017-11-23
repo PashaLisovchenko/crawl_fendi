@@ -1,30 +1,32 @@
 from django.db import models
 
 
-class Product(models.Model):
+class Categories(models.Model):
+    name = models.CharField()
+
+
+class Images(models.Model):
     pass
+
+
+class Product(models.Model):
+    product = models.CharField()
+    name = models.CharField()
+    brand = models.CharField()
+    description = models.CharField()
+    made_in = models.CharField()
+    categories = models.ForeignKey(Categories)
+    materials = models.CharField()
+    # image = models.()
+    url = models.CharField()
+    site = models.CharField()
 
 
 class Price(models.Model):
-    pass
-
-
-# class Product(scrapy.Item):
-#     id = scrapy.Field()
-#     name = scrapy.Field()
-#     brand = scrapy.Field()
-#     description = scrapy.Field()
-#     made_in = scrapy.Field()
-#     categories = scrapy.Field()
-#     materials = scrapy.Field()
-#     images = scrapy.Field()
-#     url = scrapy.Field()
-#     site = scrapy.Field()
-#
-#
-# class Price(scrapy.Item):
-#     product_id = scrapy.Field()
-#     params = scrapy.Field()
-#     stock_level = scrapy.Field()
-#     currency = scrapy.Field()
-#     date = scrapy.Field()
+    product_id = models.ForeignKey(Product)
+    price = models.DecimalField()
+    color = models.CharField()
+    size = models.CharField()
+    stock_level = models.CharField()
+    currency = models.CharField()
+    date = models.DateTimeField()
