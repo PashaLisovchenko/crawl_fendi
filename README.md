@@ -8,6 +8,10 @@ $ python3 -m venv env_name
 $ . env_name/bin/activate
 $ pip install -r requirements.txt
 ```
+## Redis
+```bash
+   $ sudo apt-get install redis-server
+```
 ## PostgreSQL
 ``` bash
     $ sudo apt-get install postgresql postgresql-server-dev-9.5
@@ -34,4 +38,8 @@ then create superuser for the project:
 and run:
 ``` bash
     $ python manage.py runserver
+    selery:
+    /crawl_fendi$ celery -A crawl_fendi worker
+    spider:
+    /crawl_fendi/scrapy_fendi$ scrapy crawl fendi
 ```
