@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
-from django.views.generic import FormView
+from django.shortcuts import redirect
+from django.views.generic import FormView, ListView
 from .forms import CrawlForm
+from .models import Product
 import redis
 
 
@@ -23,3 +24,9 @@ class CrawlView(FormView):
         r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
         r.lpush(name_spider+':start_urls', url_category)
         return redirect('/')
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'product_list.html'
+    context_object_name = 'products'
