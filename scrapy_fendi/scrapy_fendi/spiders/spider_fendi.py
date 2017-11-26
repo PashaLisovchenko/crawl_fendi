@@ -1,6 +1,6 @@
 import scrapy
 import datetime
-from scrapy_fendi.scrapy_fendi.items import Product, Price
+from ..items import Product, Price
 from scrapy_redis.spiders import RedisSpider
 
 SITE = "https://www.fendi.com"
@@ -39,7 +39,6 @@ class FendiSpider(RedisSpider):
         item_href = response.xpath('//div[contains(@class,"product-card")]/div[@class="inner"]/figure'
                                    '/a/@href').extract()
         item_full_url = [SITE + href for href in item_href]
-        # print(item_full_url)
         for url in item_full_url:
             yield scrapy.Request(url=url, callback=self.parse_detail, dont_filter=True)
 
@@ -73,32 +72,32 @@ class FendiSpider(RedisSpider):
         else:
             product['materials'] = ''
 
-        product['images'] = ','.join(response.xpath("//div[contains(@class, 'carousel-nav')]/div"
-                                                    "/img/@data-src").extract())
+        product['images'] = response.xpath("//div[contains(@class, 'carousel-nav')]/div"
+                                           "/img/@data-src").extract()
         product['url'] = response.url
         product['site'] = SITE
 
         yield product
 
-        price['product_id'] = response.xpath("//div[@class='product-info']/div[@class='product-description']"
-                                             "/p[@class='code']/span/text()").extract_first()
-        price_params = dict()
-
-        price_params['price'] = response.xpath("//div[@class='product-info']/div[@class='product-description']"
-                                               "/div[contains(@class, 'prices')]/span[@class='price ']"
-                                               "/text()").extract_first('').strip()
-        price_params['color'] = response.xpath("//div[@class='product-variant']/a/img/@alt").extract()
-
-        price_params['size'] = [size.replace('\n', '').strip()
-                                for size in response.xpath("//div[@class='form-group']/select"
-                                                           "/option[@data-sold-out='false']//text()").extract()]
-        price['params'] = price_params
-        stock = response.xpath("//div[contains(@class,'product-form')]/form/span[@class='message']/text()")
-        if stock:
-            price['stock_level'] = stock.extract_first('').strip()
-        else:
-            price['stock_level'] = 'Available'
-        price['currency'] = 'USD'
-        price['date'] = str(datetime.datetime.now())
-
-        yield price
+        # price['product_id'] = response.xpath("//div[@class='product-info']/div[@class='product-description']"
+        #                                      "/p[@class='code']/span/text()").extract_first()
+        # price_params = dict()
+        #
+        # price_params['price'] = response.xpath("//div[@class='product-info']/div[@class='product-description']"
+        #                                        "/div[contains(@class, 'prices')]/span[@class='price ']"
+        #                                        "/text()").extract_first('').strip()
+        # price_params['color'] = response.xpath("//div[@class='product-variant']/a/img/@alt").extract()
+        #
+        # price_params['size'] = [size.replace('\n', '').strip()
+        #                         for size in response.xpath("//div[@class='form-group']/select"
+        #                                                    "/option[@data-sold-out='false']//text()").extract()]
+        # price['params'] = price_params
+        # stock = response.xpath("//div[contains(@class,'product-form')]/form/span[@class='message']/text()")
+        # if stock:
+        #     price['stock_level'] = stock.extract_first('').strip()
+        # else:
+        #     price['stock_level'] = 'Available'
+        # price['currency'] = 'USD'
+        # price['date'] = str(datetime.datetime.now())
+        #
+        # yield price
