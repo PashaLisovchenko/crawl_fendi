@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Product list
+{% endblock %}
+{% block content %}
+{% if products %}
+    <table class="product">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>ID</th>
+                <th>Brand</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Categories</th>
+                <th>Material</th>
+                <th>Made in</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>
+                        {% for img in product.images.all %}
+                            <a href="{{ img.url }}">img</a>
+                        {% endfor %}
+                    </td>
+                    <td>{{ product.product_id }}</td>
+                    <td>{{ product.brand }}</td>
+                    <td>{{ product.name }}</td>
+                    <td class="description">{{ product.description }}</td>
+                    <td>{{ product.categories }}</td>
+                    <td>{{ product.material }}</td>
+                    <td>{{ product.made_in }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You need to first parse the products</p>
+{% endif %}
+{% endblock %}
